@@ -7,20 +7,13 @@ import re
 import sys
 
 
-
-def all_squares():
-    squares = []
-
-    for i in range(10):
-        for j in range(10):
-            square = []
-            nums = list(range(1, 10))
-            for num in nums:
-                square.append(num)
-
-            squares.append([square[0:2], square[3:5], square[6:8]])
-
-    return squares
+def permuations(xs):
+    if len(xs) <= 1:
+        yield xs
+    else:
+        for x in permuations(xs[1:]):
+            for i in range(len(xs)):
+                yield x[:i] + xs[0:1] + x[i:]
 
 
 def is_magic(square):
@@ -33,11 +26,24 @@ def is_magic(square):
     totals.append(square[0][1] + square[1][1] + square[2][1])
     totals.append(square[0][2] + square[1][2] + square[2][2])
 
+    totals.append(square[0][0] + square[1][1] + square[2][2])
+    totals.append(square[0][2] + square[1][1] + square[2][0])
+
     for total in totals:
         if total != 15:
             return False
 
     return True
+
+
+def all_squares():
+    squares = []
+    all_permutations = permuations(list(range(1, 10)))
+
+    for permutation in all_permutations:
+        square = [permutation[0:3], permutation[3:6], permutation[6:9]]
+        if is_magic(square):
+            yield square
 
 
 def calculate_cost(square_a, square_b):
@@ -51,8 +57,7 @@ def calculate_cost(square_a, square_b):
 
 def formingMagicSquare(s):
     #1. Generate all possible magic squares
-    distinct_squares = all_squares()
-    magic_squares = [square for square in distinct_squares if is_magic(square)]
+    magic_squares = all_squares()
 
     #2. Calculate all square diffs
     costs = [calculate_cost(s, square) for square in magic_squares]
@@ -60,17 +65,16 @@ def formingMagicSquare(s):
     #3. Return min
     return min(costs)
 
-
 if __name__ == '__main__':
     #fptr = open(os.environ['OUTPUT_PATH'], 'w')
-
-    s = [[4, 5, 8], [2, 4, 1], [1, 9, 7]]
 
     #for _ in range(3):
     #    s.append(list(map(int, input().rstrip().split())))
 
+    s = [[2, 9, 8], [4, 2, 7], [5, 6, 7]]
     result = formingMagicSquare(s)
     print(result)
+
     #fptr.write(str(result) + '\n')
 
     #fptr.close()
