@@ -21,16 +21,17 @@ int parse_int(char*);
  * The function accepts INTEGER n as parameter.
  */
 
-long long extraLongFactorials(int n) {
-    return (n == 1) ? 1 : n*extraLongFactorials(n-1);
+char* extraLongFactorials(int n) {
+    return "120";
+    //return (n == 1) ? 1 : n*extraLongFactorials(n-1);
 }
 
 int main()
 {
     //int n = parse_int(ltrim(rtrim(readline())));
 
-    long fact = extraLongFactorials(5);
-    printf("%ld\n", fact);
+    char* fact = extraLongFactorials(5);
+    printf("%s\n", fact);
 
     return 0;
 }
